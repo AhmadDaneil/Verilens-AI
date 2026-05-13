@@ -6,4 +6,5 @@ gunicorn==22.0.0
 newspaper3k
 beautifulsoup4
 lxml
+lxml_html_clean
 requests
