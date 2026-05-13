@@ -21,6 +21,9 @@ from bs4 import BeautifulSoup
 import re
 
 import urllib.request
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # ── Config ────────────────────────────────────────────────────────────────────
 MODEL_URL  = os.environ.get("MODEL_URL", "")
@@ -31,6 +34,15 @@ DEVICE     = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # ── Download model if not cached ──────────────────────────────────────────────
 def ensure_model():
+    # ── Local dev: use existing file if present ───────────────────────────
+    local_path = r"C:\dev\python\project\Scamshield-AI Testing\best_model.pt"
+    if os.path.exists(local_path):
+        print(f"✅ Using local model: {local_path}")
+        global MODEL_PATH
+        MODEL_PATH = local_path
+        return
+
+    # ── Production (Render): download from Hugging Face ───────────────────
     if os.path.exists(MODEL_PATH):
         print("✅ Model already cached")
         return
@@ -58,10 +70,9 @@ app = Flask(__name__)
 CORS(app)   # allow Flutter app on any origin
 
 # ── Load model once at startup ────────────────────────────────────────────────
-print(f"📦 Loading model from: {CHECKPOINT_PATH}")
 print(f"   Device: {DEVICE}")
 t0    = time.time()
-model = load_model(CHECKPOINT_PATH, DEVICE)
+model = load_model(MODEL_PATH, DEVICE)
 tok   = Tokenizer(max_length=128)
 print(f"✅ Model ready in {time.time() - t0:.1f}s")
 
