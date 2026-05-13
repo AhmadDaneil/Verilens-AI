@@ -3,7 +3,9 @@
 # Endpoint: POST /predict  { "text": "..." }
 # Response: { "is_fake": bool, "fake_score": float, "real_score": float, "confidence": float }
 
+import sys
 import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import time
 import torch
 import torch.nn.functional as F
@@ -21,9 +23,6 @@ from bs4 import BeautifulSoup
 import re
 
 import urllib.request
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # ── Config ────────────────────────────────────────────────────────────────────
 MODEL_URL  = os.environ.get("MODEL_URL", "")
