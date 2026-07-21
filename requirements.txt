@@ -1,0 +1,10 @@
+flask==3.0.3
+flask-cors==4.0.1
+torch
+transformers
+gunicorn==22.0.0
+newspaper3k
+beautifulsoup4
+lxml
+lxml_html_clean
+requests
