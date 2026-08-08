@@ -12,8 +12,6 @@ saved_model_fixed/
 tflite_out/
 tokenizer/
 copy/
-src/
-verilens-ai/
 *.onnx
 *.onnx.data
 *.tflite
