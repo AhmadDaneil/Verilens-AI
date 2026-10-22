@@ -9,7 +9,6 @@ from torch.utils.data import Dataset, DataLoader
 from transformers import DistilBertTokenizer, DistilBertModel
 from torch.optim import AdamW
 from sklearn.metrics import accuracy_score, f1_score
-from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 from transformers import get_linear_schedule_with_warmup
 
@@ -17,146 +16,42 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Using device:", device)
 
 ############################################
-# 1 LOAD DATASETS
+# 1 LOAD PRE-CLEANED, PRE-SPLIT DATASET
 ############################################
+# train.csv / val.csv / test.csv were produced by clean_verilens_data.py from
+# the ISOT True.csv / Fake.csv source. They are already: leakage-stripped
+# (Reuters byline / brand-name removed, site boilerplate removed), deduped,
+# class-balanced, shuffled, and stratified-split 80/10/10.
+# Columns: title, text, label (1 = real, 0 = fake).
+#
+# LIAR and FakeNewsNet are intentionally NOT included here: LIAR is short
+# fact-checked claims (a different task from full-article classification),
+# and FakeNewsNet only provides titles/URLs, not article bodies. If you want
+# an external, out-of-distribution generalization check later, that's where
+# a source like FakeNewsNet would come back in -- but it would need full
+# article text scraped from its URLs first.
 
-def load_liar_all():
-    train_df = pd.read_csv("data/liar/train.tsv", sep="\t", header=None)
-    valid_df = pd.read_csv("data/liar/valid.tsv", sep="\t", header=None)
-    test_df  = pd.read_csv("data/liar/test.tsv", sep="\t", header=None)
+DATA_DIR = "data/verilens_clean"
 
-    df = pd.concat([train_df, valid_df, test_df], ignore_index=True)
-    df = df[[1, 2]]
-    df.columns = ["label", "text"]
+def load_split(name):
+    df = pd.read_csv(os.path.join(DATA_DIR, f"{name}.csv"))
+    df["title"] = df["title"].fillna("")
+    df["text"] = df["text"].fillna("")
+    # Combine title + body into a single input string
+    df["text"] = (df["title"] + ". " + df["text"]).str.strip()
+    return df[["text", "label"]]
 
-    fake_labels = ["false", "barely-true", "pants-fire"]
-    df["label"] = df["label"].apply(lambda x: 0 if x in fake_labels else 1)
+print("Loading cleaned train/val/test splits...")
+train_df = load_split("train")
+val_df = load_split("val")
+test_df = load_split("test")
 
-    return df
-
-
-def load_isot_all():
-    fake_df = pd.read_csv("data/isot/Fake.csv")
-    true_df = pd.read_csv("data/isot/True.csv")
-
-    fake_df["label"] = 0
-    true_df["label"] = 1
-
-    fake_df = fake_df[["text", "label"]]
-    true_df = true_df[["text", "label"]]
-
-    return pd.concat([fake_df, true_df], ignore_index=True)
-
-
-def load_fakenewsnet_df(root_path):
-
-    texts = []
-    labels = []
-
-    files = [
-        ("gossipcop_real.csv", 1),
-        ("gossipcop_fake.csv", 0),
-        ("politifact_real.csv", 1),
-        ("politifact_fake.csv", 0),
-    ]
-
-    for filename, label in files:
-
-        path = os.path.join(root_path, filename)
-
-        if os.path.exists(path):
-
-            df = pd.read_csv(path)
-
-            print("\nLoaded:", filename)
-            print("Columns:", df.columns)
-
-            # Detect correct column
-            if "text" in df.columns:
-                text_column = "text"
-            elif "title" in df.columns:
-                text_column = "title"
-            elif "content" in df.columns:
-                text_column = "content"
-            else:
-                print("❌ No usable text column in", filename)
-                continue
-
-            for text in df[text_column].fillna(""):
-                if len(str(text).strip()) > 0:
-                    texts.append(text)
-                    labels.append(label)
-
-        else:
-            print("❌ Missing file:", filename)
-
-    return pd.DataFrame({
-        "text": texts,
-        "label": labels
-    })
-
-print("Loading LIAR...")
-liar_df = load_liar_all()
-
-print("Loading ISOT...")
-isot_df = load_isot_all()
-
-print("Loading FakeNewsNet...")
-fakenewsnet_df = load_fakenewsnet_df("data/fakenewsnet")
-
-print("FakeNewsNet total:", len(fakenewsnet_df))
-print(fakenewsnet_df["label"].value_counts())
-
+print("Train:", len(train_df), train_df["label"].value_counts().to_dict())
+print("Val:", len(val_df), val_df["label"].value_counts().to_dict())
+print("Test:", len(test_df), test_df["label"].value_counts().to_dict())
 
 ############################################
-# 2 SPLIT FAKENEWSNET (50% TRAIN / 50% EXTERNAL)
-############################################
-
-fnn_train_df, fnn_external_df = train_test_split(
-    fakenewsnet_df,
-    test_size=0.5,
-    random_state=42,
-    stratify=fakenewsnet_df["label"]
-)
-
-print("FakeNewsNet Train:", len(fnn_train_df))
-print("FakeNewsNet External:", len(fnn_external_df))
-
-
-############################################
-# 3 COMBINE ONLY LIAR + ISOT
-############################################
-
-combined_df = pd.concat(
-    [liar_df, isot_df, fnn_train_df],
-    ignore_index=True
-)
-
-combined_df = combined_df.sample(frac=1, random_state=42).reset_index(drop=True)
-
-print("Training samples:", len(combined_df))
-print(combined_df["label"].value_counts())
-
-############################################
-# 4️ SPLIT DATA
-############################################
-
-train_df, temp_df = train_test_split(
-    combined_df,
-    test_size=0.2,
-    random_state=42,
-    stratify=combined_df["label"]
-)
-
-val_df, test_df = train_test_split(
-    temp_df,
-    test_size=0.5,
-    random_state=42,
-    stratify=temp_df["label"]
-)
-
-############################################
-# 5️ FEATURE EXTRACTION
+# 2️ FEATURE EXTRACTION
 ############################################
 
 def clean_text(text):
@@ -222,8 +117,13 @@ all_train_features = np.array([extract_features(t) for t in train_texts])
 feature_mean = all_train_features.mean(axis=0)
 feature_std  = all_train_features.std(axis=0)
 
+# Save normalization stats so test_verilens.py uses the exact same scaling
+# the model was trained on -- recomputing mean/std from a different dataset
+# would feed the model features on the wrong scale and hurt accuracy.
+np.savez("feature_norm_stats.npz", mean=feature_mean, std=feature_std)
+
 ############################################
-# 6️ DATASET CLASS
+# 3️ DATASET CLASS
 ############################################
 
 tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-uncased")
@@ -267,7 +167,7 @@ val_loader   = DataLoader(HybridDataset(val_texts, val_labels), batch_size=16)
 test_loader  = DataLoader(HybridDataset(test_texts, test_labels), batch_size=16)
 
 ############################################
-# 7️ MODEL
+# 4️ MODEL
 ############################################
 
 class HybridModel(nn.Module):
@@ -325,10 +225,12 @@ model = HybridModel().to(device)
 
 
 ############################################
-# 8️ TRAINING SETUP
+# 5️ TRAINING SETUP
 ############################################
+# Class weights left at 1:1 since train.csv is already balanced by
+# clean_verilens_data.py. Adjust only if you re-split away from that balance.
 
-class_weights = torch.tensor([1.2, 1.0]).to(device)
+class_weights = torch.tensor([1.0, 1.0]).to(device)
 
 criterion = nn.CrossEntropyLoss(
     weight=class_weights,
@@ -346,7 +248,7 @@ scheduler = get_linear_schedule_with_warmup(
 )
 
 ############################################
-# 9️ EVALUATION FUNCTION (DEBUG ENABLED)
+# 6️ EVALUATION FUNCTION (DEBUG ENABLED)
 ############################################
 
 def evaluate(loader, debug=False):
@@ -377,7 +279,7 @@ def evaluate(loader, debug=False):
            f1_score(all_labels, all_preds, average="binary")
 
 ############################################
-# 10 TRAIN
+# 7 TRAIN
 ############################################
 
 best_val_f1 = 0
@@ -417,83 +319,13 @@ for epoch in range(epochs):
         torch.save(model.state_dict(), "best_model.pt")
 
 ############################################
-# 11 FINAL TEST
+# 8 FINAL TEST
 ############################################
 
 model.load_state_dict(torch.load("best_model.pt"))
 
-test_acc, test_f1 = evaluate(test_loader)
+test_acc, test_f1 = evaluate(test_loader, debug=True)
 
 print("\n🔥 FINAL TEST RESULTS")
 print("Final Test Accuracy:", test_acc)
 print("Final Test F1:", test_f1)
-
-############################################
-# DOMAIN ADAPTATION (FakeNewsNet Fine-Tuning)
-############################################
-
-print("\nStarting FakeNewsNet fine-tuning...")
-
-fnn_texts = fnn_train_df["text"].tolist()
-fnn_labels = fnn_train_df["label"].tolist()
-
-fnn_loader = DataLoader(
-    HybridDataset(fnn_texts, fnn_labels),
-    batch_size=8,
-    shuffle=True
-)
-
-for param in model.bert.parameters():
-    param.requires_grad = False
-
-for param in model.bert.transformer.layer[-2:].parameters():
-    param.requires_grad = True
-
-# Lower learning rate for fine-tuning
-optimizer = AdamW(model.parameters(), lr=5e-6)
-
-epochs = 4
-
-for epoch in range(epochs):
-
-    model.train()
-    total_loss = 0
-    
-
-    for batch in tqdm(fnn_loader):
-
-        input_ids = batch["input_ids"].to(device)
-        attention_mask = batch["attention_mask"].to(device)
-        extra_features = batch["extra_features"].to(device)
-        labels = batch["labels"].to(device)
-
-        optimizer.zero_grad()
-
-        outputs = model(input_ids, attention_mask, extra_features)
-        loss = criterion(outputs, labels)
-
-        loss.backward()
-        optimizer.step()
-
-        total_loss += loss.item()
-
-    print(f"\nFine-tune Epoch {epoch+1}")
-    print("Train Loss:", total_loss/len(fnn_loader))
-
-############################################
-# 12 EXTERNAL TEST AFTER DOMAIN ADAPTATION
-############################################
-
-external_texts = fnn_external_df["text"].tolist()
-external_labels = fnn_external_df["label"].tolist()
-
-external_loader = DataLoader(
-    HybridDataset(external_texts, external_labels),
-    batch_size=16
-)
-
-external_acc, external_f1 = evaluate(external_loader)
-
-print("\n🌍 EXTERNAL RESULTS AFTER DOMAIN ADAPTATION")
-print("External Accuracy:", external_acc)
-print("External F1:", external_f1)

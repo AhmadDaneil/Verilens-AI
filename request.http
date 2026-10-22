@@ -1,0 +1,6 @@
+POST https://maddane-verilens-ai.hf.space/predict_url
+Content-Type: application/json
+
+{
+  "url": "https://www.thestar.com.my/news/nation/2026/06/26/cabinet-agrees-to-implement-hybrid-work-day-effective-aug-1"
+}

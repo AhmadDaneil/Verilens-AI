@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verilens - Explanation</title>
+<style>
+:root { --bg:#fff; --fg:#1d2330; --card:#f5f6f9; --muted:#667085; --line:#e1e4ea; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#14171f; --fg:#e8eaf0; --card:#1e232e; --muted:#9aa3b5; --line:#2c3342; } }
+body { font-family:system-ui,Segoe UI,Arial,sans-serif; background:var(--bg); color:var(--fg);
+       max-width:860px; margin:2rem auto; padding:0 1rem; line-height:1.7; }
+.verdict { border-radius:14px; padding:1.1rem 1.4rem; color:#fff; margin-bottom:1.4rem; }
+.verdict.real { background:#1f8a47; } .verdict.fake { background:#c93a3a; }
+.verdict h1 { margin:0; font-size:1.6rem; } .verdict p { margin:.2rem 0 0; opacity:.92; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:12px;
+        padding:1rem 1.3rem; margin-bottom:1.2rem; }
+h2 { font-size:1.05rem; margin:.1rem 0 .6rem; }
+.w { border-radius:4px; padding:1px 3px; }
+.legend span { display:inline-block; padding:2px 10px; border-radius:4px; margin-right:.6rem; font-size:.85rem; }
+table { width:100%; border-collapse:collapse; font-size:.92rem; }
+td { padding:.25rem .4rem; border-bottom:1px solid var(--line); }
+td.word { font-weight:600; width:28%; } td.num { text-align:right; color:var(--muted); width:14%; }
+.bar { height:10px; border-radius:5px; } .bar.real { background:#22a046; } .bar.fake { background:#d63c3c; }
+.muted { color:var(--muted); font-size:.88rem; }
+.warn { background:#fff3cd; color:#664d03; border-radius:8px; padding:.6rem .9rem; margin-bottom:1rem; font-size:.9rem; }
+</style></head><body>
+<div class="verdict fake">
+  <h1>Prediction: FAKE</h1>
+  <p>Model confidence 95.4% &nbsp;|&nbsp; P(real) 4.6% &nbsp;|&nbsp; P(fake) 95.4%</p>
+</div>
+<div class="warn">Low explanation fidelity (R&sup2; = 0.32): the model's decision is spread across many words, so the highlights are only a rough guide.</div>
+<div class="card">
+  <h2>Why? Words that drove the decision</h2>
+  <p class="legend">
+    <span style="background:rgba(34,160,70,.55)">pushes toward REAL</span>
+    <span style="background:rgba(214,60,60,.55)">pushes toward FAKE</span>
+    <span class="muted">darker = stronger influence. Hover a word for its weight.</span>
+  </p>
+  <div><span class="w" style="background:rgba(214,60,60,0.45)" title="pushes toward fake (-0.008)">IS</span> AN UGLY REVOLT INEVITABLE? <span class="w" style="background:rgba(214,60,60,0.80)" title="pushes toward fake (-0.018)">Bernie</span> Sanders Supporters Are Asked If They’<span class="w" style="background:rgba(214,60,60,0.54)" title="pushes toward fake (-0.011)">ll</span> Vote For <span class="w" style="background:rgba(214,60,60,0.59)" title="pushes toward fake (-0.012)">Hillary</span> If <span class="w" style="background:rgba(214,60,60,0.80)" title="pushes toward fake (-0.018)">Bernie</span> Loses Nomination [VIDEO]. <span class="w" style="background:rgba(214,60,60,0.80)" title="pushes toward fake (-0.018)">Bernie</span> Sanders supporters radicals are <span class="w" style="background:rgba(214,60,60,0.43)" title="pushes toward fake (-0.007)">asked</span> how they feel about <span class="w" style="background:rgba(214,60,60,0.59)" title="pushes toward fake (-0.012)">Hillary</span>. Their answers are very telling. How many of <span class="w" style="background:rgba(214,60,60,0.47)" title="pushes toward fake (-0.009)">these</span> <span class="w" style="background:rgba(214,60,60,0.80)" title="pushes toward fake (-0.018)">Bernie</span> supporters <span class="w" style="background:rgba(214,60,60,0.48)" title="pushes toward fake (-0.009)">do</span> you think will show up to the polls in <span class="w" style="background:rgba(34,160,70,0.20)" title="pushes toward real (+0.001)">November</span> if <span class="w" style="background:rgba(214,60,60,0.59)" title="pushes toward fake (-0.012)">Hillary</span> is the nominee?Watch <span class="w" style="background:rgba(214,60,60,0.43)" title="pushes toward fake (-0.008)">Black</span> Lives Matter Communist <span class="w" style="background:rgba(214,60,60,0.59)" title="pushes toward fake (-0.012)">terrorist</span> denounce <span class="w" style="background:rgba(214,60,60,0.59)" title="pushes toward fake (-0.012)">Hillary</span> at the 4:35 mark and the Check your white privilege girl mark wearing a <span class="w" style="background:rgba(214,60,60,0.45)" title="pushes toward fake (-0.008)">t</span>-<span class="w" style="background:rgba(214,60,60,0.54)" title="pushes toward fake (-0.011)">shirt</span> honoring <span class="w" style="background:rgba(214,60,60,0.43)" title="pushes toward fake (-0.008)">Black</span> Panther and cop killer <span class="w" style="background:rgba(214,60,60,0.56)" title="pushes toward fake (-0.011)">Assata</span> <span class="w" style="background:rgba(214,60,60,0.56)" title="pushes toward fake (-0.011)">Shakur</span> at the 5:50 :Judging by the responses of <span class="w" style="background:rgba(214,60,60,0.47)" title="pushes toward fake (-0.009)">these</span> Bern-<span class="w" style="background:rgba(214,60,60,0.80)" title="pushes toward fake (-0.018)">bots</span>, it looks</div>
+  <p class="muted"><b>Not analysed</b> (beyond the first ~100 words the model reads):  like Hillary might be ignored by a large percentage of voters in November if her super delegates and the DNC work behind the scenes to ensure that Hillary is the ONLY acceptable presidential candidate for the Democrat Party.</p>
+</div>
+
+<div class="card">
+  <h2>Top influential words <span class="muted">(weight = shift in log-odds of REAL vs FAKE)</span></h2>
+  <table><tr><td class="word">bots</td><td><div class="bar fake" style="width:100%"></div></td><td class="num">-0.018</td><td>FAKE</td></tr><tr><td class="word">Bernie</td><td><div class="bar fake" style="width:99%"></div></td><td class="num">-0.018</td><td>FAKE</td></tr><tr><td class="word">terrorist</td><td><div class="bar fake" style="width:66%"></div></td><td class="num">-0.012</td><td>FAKE</td></tr><tr><td class="word">Hillary</td><td><div class="bar fake" style="width:66%"></div></td><td class="num">-0.012</td><td>FAKE</td></tr><tr><td class="word">Assata</td><td><div class="bar fake" style="width:61%"></div></td><td class="num">-0.011</td><td>FAKE</td></tr><tr><td class="word">Shakur</td><td><div class="bar fake" style="width:61%"></div></td><td class="num">-0.011</td><td>FAKE</td></tr><tr><td class="word">ll</td><td><div class="bar fake" style="width:57%"></div></td><td class="num">-0.011</td><td>FAKE</td></tr><tr><td class="word">shirt</td><td><div class="bar fake" style="width:57%"></div></td><td class="num">-0.011</td><td>FAKE</td></tr><tr><td class="word">do</td><td><div class="bar fake" style="width:48%"></div></td><td class="num">-0.009</td><td>FAKE</td></tr><tr><td class="word">these</td><td><div class="bar fake" style="width:46%"></div></td><td class="num">-0.009</td><td>FAKE</td></tr><tr><td class="word">t</td><td><div class="bar fake" style="width:44%"></div></td><td class="num">-0.008</td><td>FAKE</td></tr><tr><td class="word">IS</td><td><div class="bar fake" style="width:43%"></div></td><td class="num">-0.008</td><td>FAKE</td></tr><tr><td class="word">Black</td><td><div class="bar fake" style="width:40%"></div></td><td class="num">-0.008</td><td>FAKE</td></tr><tr><td class="word">asked</td><td><div class="bar fake" style="width:39%"></div></td><td class="num">-0.007</td><td>FAKE</td></tr><tr><td class="word">November</td><td><div class="bar real" style="width:3%"></div></td><td class="num">+0.001</td><td>REAL</td></tr></table>
+</div>
+
+<p class="muted">Explanation method: LIME (1000 perturbed samples). Explanation fidelity R&sup2; = 0.32. It shows which words the
+model relies on to reach its prediction; it does not verify whether the article's claims are true.
+Verilens is a decision aid, so please cross-check important claims with trusted sources.</p>
+</body></html>

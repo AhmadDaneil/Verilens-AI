@@ -1,0 +1,31 @@
+MODEL: Hybrid DistilBERT + Bi-LSTM (Proposed Architecture)
+Hyperparameters: MAX_LEN=128, BATCH=16, LR=2e-05, EPOCHS=6, PATIENCE=2, LSTM_HIDDEN=128, FREEZE_LAYERS=3
+
+Epoch 1 | Train Loss: 0.3185 | Val Acc: 0.9155 | Val F1: 0.9154 | Val Precision: 0.9155 | Val Recall: 0.9155
+  ✅ Best model saved (F1=0.9154)
+Epoch 2 | Train Loss: 0.2993 | Val Acc: 0.9203 | Val F1: 0.9204 | Val Precision: 0.9218 | Val Recall: 0.9203
+  ✅ Best model saved (F1=0.9204)
+Epoch 3 | Train Loss: 0.2838 | Val Acc: 0.9148 | Val F1: 0.9147 | Val Precision: 0.9197 | Val Recall: 0.9148
+  No improvement. Patience: 1/2
+Epoch 4 | Train Loss: 0.2626 | Val Acc: 0.9174 | Val F1: 0.9173 | Val Precision: 0.9174 | Val Recall: 0.9174
+  No improvement. Patience: 2/2
+  Early stopping triggered.
+
+==================================================
+FINAL TEST RESULTS — Hybrid DistilBERT + Bi-LSTM
+==================================================
+Test Accuracy  : 0.9217 (92.17%)
+Test F1 Score  : 0.9216 (92.16%)
+Test Precision : 0.9229
+Test Recall    : 0.9217
+
+Classification Report:
+              precision    recall  f1-score   support
+
+        FAKE       0.95      0.90      0.92      2916
+        REAL       0.90      0.95      0.92      2842
+
+    accuracy                           0.92      5758
+   macro avg       0.92      0.92      0.92      5758
+weighted avg       0.92      0.92      0.92      5758
+

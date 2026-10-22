@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verilens - Explanation</title>
+<style>
+:root { --bg:#fff; --fg:#1d2330; --card:#f5f6f9; --muted:#667085; --line:#e1e4ea; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#14171f; --fg:#e8eaf0; --card:#1e232e; --muted:#9aa3b5; --line:#2c3342; } }
+body { font-family:system-ui,Segoe UI,Arial,sans-serif; background:var(--bg); color:var(--fg);
+       max-width:860px; margin:2rem auto; padding:0 1rem; line-height:1.7; }
+.verdict { border-radius:14px; padding:1.1rem 1.4rem; color:#fff; margin-bottom:1.4rem; }
+.verdict.real { background:#1f8a47; } .verdict.fake { background:#c93a3a; }
+.verdict h1 { margin:0; font-size:1.6rem; } .verdict p { margin:.2rem 0 0; opacity:.92; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:12px;
+        padding:1rem 1.3rem; margin-bottom:1.2rem; }
+h2 { font-size:1.05rem; margin:.1rem 0 .6rem; }
+.w { border-radius:4px; padding:1px 3px; }
+.legend span { display:inline-block; padding:2px 10px; border-radius:4px; margin-right:.6rem; font-size:.85rem; }
+table { width:100%; border-collapse:collapse; font-size:.92rem; }
+td { padding:.25rem .4rem; border-bottom:1px solid var(--line); }
+td.word { font-weight:600; width:28%; } td.num { text-align:right; color:var(--muted); width:14%; }
+.bar { height:10px; border-radius:5px; } .bar.real { background:#22a046; } .bar.fake { background:#d63c3c; }
+.muted { color:var(--muted); font-size:.88rem; }
+.warn { background:#fff3cd; color:#664d03; border-radius:8px; padding:.6rem .9rem; margin-bottom:1rem; font-size:.9rem; }
+</style></head><body>
+<div class="verdict fake">
+  <h1>Prediction: FAKE</h1>
+  <p>Model confidence 95.6% &nbsp;|&nbsp; P(real) 4.4% &nbsp;|&nbsp; P(fake) 95.6%</p>
+</div>
+<div class="warn">Low explanation fidelity (R&sup2; = 0.34): the model's decision is spread across many words, so the highlights are only a rough guide.</div>
+<div class="card">
+  <h2>Why? Words that drove the decision</h2>
+  <p class="legend">
+    <span style="background:rgba(34,160,70,.55)">pushes toward REAL</span>
+    <span style="background:rgba(214,60,60,.55)">pushes toward FAKE</span>
+    <span class="muted">darker = stronger influence. Hover a word for its weight.</span>
+  </p>
+  <div><span class="w" style="background:rgba(214,60,60,0.59)" title="pushes toward fake (-0.017)">Bush</span> Speechwriter LEVELS <span class="w" style="background:rgba(214,60,60,0.80)" title="pushes toward fake (-0.026)">Trump</span> With <span class="w" style="background:rgba(214,60,60,0.53)" title="pushes toward fake (-0.015)">This</span> <span class="w" style="background:rgba(214,60,60,0.48)" title="pushes toward fake (-0.012)">Devastating</span> Inauguration Day Tweet. Donald <span class="w" style="background:rgba(214,60,60,0.80)" title="pushes toward fake (-0.026)">Trump</span> <span class="w" style="background:rgba(214,60,60,0.55)" title="pushes toward fake (-0.015)">officially</span> and <span class="w" style="background:rgba(214,60,60,0.53)" title="pushes toward fake (-0.015)">depressingly</span> takes over the White House today, but former <span class="w" style="background:rgba(214,60,60,0.54)" title="pushes toward fake (-0.015)">George</span> <span class="w" style="background:rgba(214,60,60,0.59)" title="pushes toward fake (-0.017)">W</span>. <span class="w" style="background:rgba(214,60,60,0.59)" title="pushes toward fake (-0.017)">Bush</span> speechwriter David <span class="w" style="background:rgba(214,60,60,0.75)" title="pushes toward fake (-0.024)">Frum</span> <span class="w" style="background:rgba(214,60,60,0.57)" title="pushes toward fake (-0.017)">had</span> some strong words for him on this Inauguration Day.Of course, <span class="w" style="background:rgba(214,60,60,0.80)" title="pushes toward fake (-0.026)">Trump</span> won t bother actually <span class="w" style="background:rgba(214,60,60,0.52)" title="pushes toward fake (-0.014)">going</span> on the job until Monday since <span class="w" style="background:rgba(214,60,60,0.58)" title="pushes toward fake (-0.017)">he</span> <span class="w" style="background:rgba(214,60,60,0.58)" title="pushes toward fake (-0.017)">has</span> decided to take a two day vacation first.So <span class="w" style="background:rgba(214,60,60,0.58)" title="pushes toward fake (-0.017)">he</span> ll have plenty of time to read a tweet <span class="w" style="background:rgba(214,60,60,0.75)" title="pushes toward fake (-0.024)">Frum</span> posted on Twitter and throw a temper <span class="w" style="background:rgba(214,60,60,0.57)" title="pushes toward fake (-0.016)">tantrum</span> about it.<span class="w" style="background:rgba(214,60,60,0.75)" title="pushes toward fake (-0.024)">Frum</span> called <span class="w" style="background:rgba(214,60,60,0.80)" title="pushes toward fake (-0.026)">Trump</span> the worst human being who <span class="w" style="background:rgba(214,60,60,0.58)" title="pushes toward fake (-0.017)">has</span> ever become president, and that <span class="w" style="background:rgba(214,60,60,0.51)" title="pushes toward fake (-0.014)">includes</span> every president who</div>
+  <p class="muted"><b>Not analysed</b> (beyond the first ~100 words the model reads):  owned slaves.The worst human being ever to enter the presidency, and I include all the slaveholders. David Frum (@davidfrum) January 20, 2017No doubt, if slavery still existed Donald Trump would definitely be a slaveholder. Hell, he has his company s products made by cheap labor overseas. Slaves would have to manufacture his products for free and we all know Trump would love that. In fact, 20 per...</p>
+</div>
+
+<div class="card">
+  <h2>Top influential words <span class="muted">(weight = shift in log-odds of REAL vs FAKE)</span></h2>
+  <table><tr><td class="word">Trump</td><td><div class="bar fake" style="width:100%"></div></td><td class="num">-0.026</td><td>FAKE</td></tr><tr><td class="word">Frum</td><td><div class="bar fake" style="width:91%"></div></td><td class="num">-0.024</td><td>FAKE</td></tr><tr><td class="word">W</td><td><div class="bar fake" style="width:66%"></div></td><td class="num">-0.017</td><td>FAKE</td></tr><tr><td class="word">Bush</td><td><div class="bar fake" style="width:66%"></div></td><td class="num">-0.017</td><td>FAKE</td></tr><tr><td class="word">he</td><td><div class="bar fake" style="width:65%"></div></td><td class="num">-0.017</td><td>FAKE</td></tr><tr><td class="word">has</td><td><div class="bar fake" style="width:65%"></div></td><td class="num">-0.017</td><td>FAKE</td></tr><tr><td class="word">had</td><td><div class="bar fake" style="width:63%"></div></td><td class="num">-0.017</td><td>FAKE</td></tr><tr><td class="word">tantrum</td><td><div class="bar fake" style="width:63%"></div></td><td class="num">-0.016</td><td>FAKE</td></tr><tr><td class="word">officially</td><td><div class="bar fake" style="width:59%"></div></td><td class="num">-0.015</td><td>FAKE</td></tr><tr><td class="word">George</td><td><div class="bar fake" style="width:58%"></div></td><td class="num">-0.015</td><td>FAKE</td></tr><tr><td class="word">depressingly</td><td><div class="bar fake" style="width:57%"></div></td><td class="num">-0.015</td><td>FAKE</td></tr><tr><td class="word">This</td><td><div class="bar fake" style="width:56%"></div></td><td class="num">-0.015</td><td>FAKE</td></tr><tr><td class="word">going</td><td><div class="bar fake" style="width:55%"></div></td><td class="num">-0.014</td><td>FAKE</td></tr><tr><td class="word">includes</td><td><div class="bar fake" style="width:53%"></div></td><td class="num">-0.014</td><td>FAKE</td></tr><tr><td class="word">Devastating</td><td><div class="bar fake" style="width:47%"></div></td><td class="num">-0.012</td><td>FAKE</td></tr></table>
+</div>
+
+<p class="muted">Explanation method: LIME (1000 perturbed samples). Explanation fidelity R&sup2; = 0.34. It shows which words the
+model relies on to reach its prediction; it does not verify whether the article's claims are true.
+Verilens is a decision aid, so please cross-check important claims with trusted sources.</p>
+</body></html>

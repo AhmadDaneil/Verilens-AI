@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verilens - Explanation</title>
+<style>
+:root { --bg:#fff; --fg:#1d2330; --card:#f5f6f9; --muted:#667085; --line:#e1e4ea; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#14171f; --fg:#e8eaf0; --card:#1e232e; --muted:#9aa3b5; --line:#2c3342; } }
+body { font-family:system-ui,Segoe UI,Arial,sans-serif; background:var(--bg); color:var(--fg);
+       max-width:860px; margin:2rem auto; padding:0 1rem; line-height:1.7; }
+.verdict { border-radius:14px; padding:1.1rem 1.4rem; color:#fff; margin-bottom:1.4rem; }
+.verdict.real { background:#1f8a47; } .verdict.fake { background:#c93a3a; }
+.verdict h1 { margin:0; font-size:1.6rem; } .verdict p { margin:.2rem 0 0; opacity:.92; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:12px;
+        padding:1rem 1.3rem; margin-bottom:1.2rem; }
+h2 { font-size:1.05rem; margin:.1rem 0 .6rem; }
+.w { border-radius:4px; padding:1px 3px; }
+.legend span { display:inline-block; padding:2px 10px; border-radius:4px; margin-right:.6rem; font-size:.85rem; }
+table { width:100%; border-collapse:collapse; font-size:.92rem; }
+td { padding:.25rem .4rem; border-bottom:1px solid var(--line); }
+td.word { font-weight:600; width:28%; } td.num { text-align:right; color:var(--muted); width:14%; }
+.bar { height:10px; border-radius:5px; } .bar.real { background:#22a046; } .bar.fake { background:#d63c3c; }
+.muted { color:var(--muted); font-size:.88rem; }
+.warn { background:#fff3cd; color:#664d03; border-radius:8px; padding:.6rem .9rem; margin-bottom:1rem; font-size:.9rem; }
+</style></head><body>
+<div class="verdict real">
+  <h1>Prediction: REAL</h1>
+  <p>Model confidence 95.1% &nbsp;|&nbsp; P(real) 95.1% &nbsp;|&nbsp; P(fake) 4.9%</p>
+</div>
+<div class="warn">Low explanation fidelity (R&sup2; = 0.24): the model's decision is spread across many words, so the highlights are only a rough guide.</div>
+<div class="card">
+  <h2>Why? Words that drove the decision</h2>
+  <p class="legend">
+    <span style="background:rgba(34,160,70,.55)">pushes toward REAL</span>
+    <span style="background:rgba(214,60,60,.55)">pushes toward FAKE</span>
+    <span class="muted">darker = stronger influence. Hover a word for its weight.</span>
+  </p>
+  <div>Saudi <span class="w" style="background:rgba(34,160,70,0.61)" title="pushes toward real (+0.034)">Arabia</span> intercepts <span class="w" style="background:rgba(34,160,70,0.80)" title="pushes toward real (+0.049)">Yemeni</span> missile, second in a <span class="w" style="background:rgba(34,160,70,0.78)" title="pushes toward real (+0.047)">month</span>. A <span class="w" style="background:rgba(214,60,60,0.40)" title="pushes toward fake (-0.017)">ballistic</span> missile fired by <span class="w" style="background:rgba(34,160,70,0.80)" title="pushes toward real (+0.049)">Yemen</span> s armed <span class="w" style="background:rgba(34,160,70,0.69)" title="pushes toward real (+0.040)">Houthi</span> <span class="w" style="background:rgba(34,160,70,0.54)" title="pushes toward real (+0.028)">group</span> at Saudi <span class="w" style="background:rgba(34,160,70,0.61)" title="pushes toward real (+0.034)">Arabia</span> <span class="w" style="background:rgba(214,60,60,0.33)" title="pushes toward fake (-0.012)">was</span> shot down <span class="w" style="background:rgba(34,160,70,0.62)" title="pushes toward real (+0.034)">on</span> <span class="w" style="background:rgba(34,160,70,0.79)" title="pushes toward real (+0.048)">Thursday</span> <span class="w" style="background:rgba(34,160,70,0.46)" title="pushes toward real (+0.022)">near</span> the south-<span class="w" style="background:rgba(34,160,70,0.44)" title="pushes toward real (+0.020)">western</span> city of Khamis Mushait, the Saudi-owned al-Arabiya channel <span class="w" style="background:rgba(34,160,70,0.64)" title="pushes toward real (+0.036)">reported</span>. It <span class="w" style="background:rgba(214,60,60,0.33)" title="pushes toward fake (-0.012)">was</span> the second <span class="w" style="background:rgba(214,60,60,0.40)" title="pushes toward fake (-0.017)">ballistic</span> missile fired from <span class="w" style="background:rgba(34,160,70,0.80)" title="pushes toward real (+0.049)">Yemen</span> this <span class="w" style="background:rgba(34,160,70,0.78)" title="pushes toward real (+0.047)">month</span>, after an earlier <span class="w" style="background:rgba(214,60,60,0.39)" title="pushes toward fake (-0.016)">rocket</span> <span class="w" style="background:rgba(214,60,60,0.33)" title="pushes toward fake (-0.012)">was</span> brought down <span class="w" style="background:rgba(34,160,70,0.46)" title="pushes toward real (+0.022)">near</span> King Khaled Airport <span class="w" style="background:rgba(34,160,70,0.62)" title="pushes toward real (+0.034)">on</span> the northern outskirts of the capital Riyadh. A Saudi-led coalition fighting the Houthis in <span class="w" style="background:rgba(34,160,70,0.80)" title="pushes toward real (+0.049)">Yemen</span> has closed <span class="w" style="background:rgba(34,160,70,0.65)" title="pushes toward real (+0.037)">air</span>, land and sea access in a move it says is meant to stop a flow of Iranian arms to the</div>
+  <p class="muted"><b>Not analysed</b> (beyond the first ~100 words the model reads):  Houthis, who control much of northern Yemen. The blockade has cut food imports to seven million people on the brink of famine. Air defense intercepted a ballistic missile, fired by the Houthis toward Khamis Mushait, Arabiya said on its Twitter account, without giving details. The Houthis and allied militias loyal to former Yemeni President Ali Abdullah Saleh, who have fired dozens of missiles int...</p>
+</div>
+
+<div class="card">
+  <h2>Top influential words <span class="muted">(weight = shift in log-odds of REAL vs FAKE)</span></h2>
+  <table><tr><td class="word">Yemeni</td><td><div class="bar real" style="width:99%"></div></td><td class="num">+0.049</td><td>REAL</td></tr><tr><td class="word">Yemen</td><td><div class="bar real" style="width:99%"></div></td><td class="num">+0.049</td><td>REAL</td></tr><tr><td class="word">Thursday</td><td><div class="bar real" style="width:97%"></div></td><td class="num">+0.048</td><td>REAL</td></tr><tr><td class="word">month</td><td><div class="bar real" style="width:95%"></div></td><td class="num">+0.047</td><td>REAL</td></tr><tr><td class="word">Houthi</td><td><div class="bar real" style="width:81%"></div></td><td class="num">+0.040</td><td>REAL</td></tr><tr><td class="word">air</td><td><div class="bar real" style="width:76%"></div></td><td class="num">+0.037</td><td>REAL</td></tr><tr><td class="word">reported</td><td><div class="bar real" style="width:74%"></div></td><td class="num">+0.036</td><td>REAL</td></tr><tr><td class="word">on</td><td><div class="bar real" style="width:70%"></div></td><td class="num">+0.034</td><td>REAL</td></tr><tr><td class="word">Arabia</td><td><div class="bar real" style="width:68%"></div></td><td class="num">+0.034</td><td>REAL</td></tr><tr><td class="word">group</td><td><div class="bar real" style="width:57%"></div></td><td class="num">+0.028</td><td>REAL</td></tr><tr><td class="word">near</td><td><div class="bar real" style="width:44%"></div></td><td class="num">+0.022</td><td>REAL</td></tr><tr><td class="word">western</td><td><div class="bar real" style="width:41%"></div></td><td class="num">+0.020</td><td>REAL</td></tr><tr><td class="word">ballistic</td><td><div class="bar fake" style="width:35%"></div></td><td class="num">-0.017</td><td>FAKE</td></tr><tr><td class="word">rocket</td><td><div class="bar fake" style="width:33%"></div></td><td class="num">-0.016</td><td>FAKE</td></tr><tr><td class="word">was</td><td><div class="bar fake" style="width:23%"></div></td><td class="num">-0.012</td><td>FAKE</td></tr></table>
+</div>
+
+<p class="muted">Explanation method: LIME (1000 perturbed samples). Explanation fidelity R&sup2; = 0.24. It shows which words the
+model relies on to reach its prediction; it does not verify whether the article's claims are true.
+Verilens is a decision aid, so please cross-check important claims with trusted sources.</p>
+</body></html>

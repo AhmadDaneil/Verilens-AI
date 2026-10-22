@@ -1,0 +1,4 @@
+MODEL: DistilBERT Only
+Hyperparameters: MAX_LEN=128, BATCH=16, LR=2e-05, EPOCHS=6, PATIENCE=2, FREEZE_LAYERS=3
+
+Epoch 1 | Train Loss: 0.3146 | Val Acc: 0.9085 | Val F1: 0.9084 | Val Precision: 0.9156 | Val Recall: 0.9085
